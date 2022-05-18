@@ -1,0 +1,22 @@
+{%extends 'base.html'%}
+{%block title%} LOGIN {%endblock%}
+<!--the login page-->
+{%block content%}
+<h2> LOGIN </h2><!--the header -->
+
+<!-- the form below is the login form. it contains an email and password field-->
+<form action="/login" method="post">
+    <div class="mb-3">
+      <label for="exampleInputEmail1" class="form-label">Email address</label>
+      <input type="email" class="form-control" name="email" placeholder="enter Email" aria-describedby="emailHelp">
+      <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputPassword1" class="form-label">Password</label>
+      <input type="password" class="form-control" name="password" placeholder="enter password">
+    </div>
+    <div class="d-grid gap-2">
+        <button class="btn btn-primary" type="submit">Login</button>
+    </div>
+</form>
+{% endblock %}

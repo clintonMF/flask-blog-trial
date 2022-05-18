@@ -1,0 +1,111 @@
+<!-- this file was created because there is a huge similarity between the setup of the homepage and
+the post.html page. this is to prevent writing the same code twice or more-->
+{%extends 'base.html'%}
+{%block title%} HOMEPAGE {%endblock%}
+{%block content%}
+
+<h1 align="center">{%block header%}POST{%endblock%}</h1>
+{% for post in posts %}
+
+<!-- i decided to show the post in a card format-->
+<div class="card border-dark">
+    <div class="card-header  d-flex justify-content-between align-items-center">
+        <a href="/posts/{{post.user.username}}/" >{{post.user.username}}</a>
+        <div class="">
+            {{post.like|length}}    <!-- this is to show the number of likes-->
+            
+            {%if user.id in post.like|map(attribute="author")|list%}
+            {%set icon_class="fas fa-thumbs-up" %}
+            {%else%}
+            {%set icon_class="far fa-thumbs-up" %}
+            {%endif%}
+
+            <a href="/like-post/{{post.id}}" class=""><i class="{{icon_class}}""></i></a>   <!--this is the like button-->
+        {% if user.id == post.author %}
+        <!--this block of code shows the delete button to the author of the post-->
+        <div class="btn-group ">
+            <button class="btn btn-sm btn-primary dropdown-toggle"
+             type="button" data-bs-toggle="dropdown" >
+            </button>
+            <ul class="dropdown-menu">  
+                <li ><a href="/delete-post/{{post.id}}" class="dropdown-item">Delete</a></li>
+            </ul>
+        </div>
+        {%endif%}
+        </div>
+    </div>
+    <div class="card-body">
+      <blockquote class="blockquote mb-0">
+        <p>{{post.text}}</p><!--this is for displaying the post-->
+        <br/>
+
+
+        <!--this div is for displaying the comment
+        but a button is required to collapse it.
+        this button is created in B1 just below this div-->
+        <div class="collapse" id="comment-{{post.id}}">
+            <div class="clard">
+                <div class="card-body" id="comments-expanded-{{post.id}}">
+                    {%for comment in post.comment %}
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <a href="/posts/{{comment.user.username}}">
+                                {{comment.user.username}}</a> - {{comment.text}}
+                        </div>
+                        <div>
+                            <small class="text-muted">{{comment.date_created}}</small>
+                                <!--this block of code shows the delete button to a comment-->
+                                {% if user.id == comment.author or  user.id == post.author %}
+                                <div class="btn-group ">
+                                    <button class="btn btn-sm btn-primary dropdown-toggle"
+                                    type="button" data-bs-toggle="dropdown" >
+                                    </button>
+                                    <ul class="dropdown-menu">  
+                                        <li ><a href="/delete-comment/{{comment.id}}" class="dropdown-item">Delete</a></li>
+                                    </ul>
+                                </div>
+                                {% endif %}
+                        </div>
+                    </div>
+                    {%endfor%}
+
+                </div>
+            </div>
+        </div>
+
+        {% if post.comment|length > 0  %}
+         <!-- B1 -this logic is to ensure that if there are no post the toggle button doesnt work-->
+        <a href="#comment-{{post.id}} " role="button" data-bs-toggle="collapse" class="">
+            <small>view {{post.comment|length}} Comments</small>
+        </a><!--this links to the div with id=commen-{{post.id}}-->
+        {%else%}
+        <small class="text-muted">No comments</small>
+        {%endif%}
+        <br/>
+
+        <!--the form below is for creating comments-->
+        <form action="/create_comment/{{post.id}}" method="post" class="input-group mb-3">
+            <input type="text" id="text" name="text" placeholder="Create comment" class="form-control">
+            <button type="submit" class="btn btn-primary">comment</button>
+        </form>
+
+
+        <footer class="blockquote-footer text-muted">
+             <cite title="Source Title">Date created - </cite>{{post.date_created}}
+        </footer>
+
+      </blockquote>
+    </div>
+</div><br>
+{%endfor%}  
+{% endblock %}
+
+
+<!--the footer is for the -->
+{% block footer%}
+<a href="/create-post" >
+    <div class="" align="center">
+        <button class="btn btn-primary">Create  a post</button>
+    </div>
+</a>
+{%endblock%}

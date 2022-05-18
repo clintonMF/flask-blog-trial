@@ -1,0 +1,10 @@
+{% extends 'post_div.html' %}
+{%block title%} {{user.username.title()}}'s posts {%endblock%}
+{%block header%}  {{user.username.title()}}'s posts {%endblock%}
+{%block footer%}
+<a href="/home" class="">
+    <div class="d-grid gap-2" align = "center">
+        <button class="btn btn-secondary" type="submit">BACK</button>
+    </div>
+</a>
+{%endblock%}
